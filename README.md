@@ -1,4 +1,4 @@
-# 🎅🎄  Health Tracker App 🎄📬
+#   Health Tracker App 
 ####  University Project.
 
 ## App Overview
