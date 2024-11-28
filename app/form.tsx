@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';  // Christmas icon used in the first try before updating with the Figma ones
+import { LinearGradient } from 'expo-linear-gradient'; // For gradient button
 
 export default function ContactUsForm() {
   const [name, setName] = useState('');
@@ -25,27 +25,24 @@ export default function ContactUsForm() {
 
   return (
     <View style={styles.container}>
-      {/* Title with Christmas font */}
-      <Text style={[styles.title, { fontFamily: 'Mountains-of-Christmas' }]}>Contact Us</Text>
+      <Text style={styles.headerText}>Have a problem? Or a suggestion?</Text>
+      <Text style={styles.title}>Contact Us!</Text>
 
-      {/* Name input */}
       <TextInput
         style={styles.input}
         placeholder="Your Name"
         value={name}
         onChangeText={setName}
+        autoCapitalize="words"
       />
-
-      {/* Email input */}
       <TextInput
         style={styles.input}
         placeholder="Your Email"
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
+        autoCapitalize="none"
       />
-
-      {/* Message input */}
       <TextInput
         style={[styles.input, styles.textArea]}
         placeholder="Your Message"
@@ -55,10 +52,28 @@ export default function ContactUsForm() {
         numberOfLines={4}
       />
 
-      {/* Submit button */}
-      <TouchableOpacity style={styles.buttonRed} onPress={handleSubmit}>
-        <Text style={styles.buttonText}>Send Message</Text>
+      <View style={styles.checkboxContainer}>
+        <Text style={styles.termsText}>
+          By submitting, you accept our{' '}
+          <Text style={styles.linkText}>Privacy Policy</Text> and{' '}
+          <Text style={styles.linkText}>Terms of Use</Text>
+        </Text>
+      </View>
+
+      {/* Submit button with gradient background */}
+      <TouchableOpacity onPress={handleSubmit} style={styles.buttonContainer}>
+        <LinearGradient
+          colors={['#6A11CB', '#2575FC']} // Gradient color
+          style={styles.buttonGradient}
+        >
+          <Text style={styles.buttonText}>Send Message</Text>
+        </LinearGradient>
       </TouchableOpacity>
+
+      {/* Footer text */}
+      <Text style={styles.footerText}>
+        Need help? <Text style={styles.linkText}>Contact Support</Text>
+      </Text>
     </View>
   );
 }
@@ -69,40 +84,70 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
-    padding: 16,
+    paddingHorizontal: 20,
+  },
+  headerText: {
+    fontSize: 18,
+    color: '#777',
+    marginBottom: 8,
   },
   title: {
-    fontSize: 30,
+    fontSize: 28,
     fontWeight: 'bold',
-    color: '#e60000',  // Red color to fit the Christmas theme
-    marginBottom: 30,
-    textAlign: 'center',
+    color: '#000',
+    marginBottom: 24,
   },
   input: {
-    width: '80%',
-    padding: 12,
+    width: '100%',
+    height: 50,
+    backgroundColor: '#F7F8FA',
+    borderRadius: 10,
+    paddingHorizontal: 16,
     marginBottom: 16,
-    backgroundColor: 'white',
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#ccc', // Light grey border for input fields
+    fontSize: 16,
+    color: '#333',
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
   textArea: {
-    height: 100,
-    textAlignVertical: 'top',  // Align the text at the top of the TextInput
+    height: 120,
+    textAlignVertical: 'top', // Align text at the top of the input
   },
-  buttonRed: {
-    backgroundColor: '#e60000',  // Red background for the button
-    paddingVertical: 12,
-    paddingHorizontal: 30,
-    borderRadius: 8,
-    marginVertical: 10,
-    width: '80%',  // Make the button wide
+  checkboxContainer: {
+    width: '100%',
+    marginBottom: 16,
+  },
+  termsText: {
+    fontSize: 12,
+    color: '#777',
+    textAlign: 'center',
+  },
+  linkText: {
+    color: '#2575FC',
+    fontWeight: 'bold',
+  },
+  buttonContainer: {
+    width: '100%',
+    marginBottom: 16,
+  },
+  buttonGradient: {
+    width: '100%',
+    height: 50,
+    borderRadius: 25,
+    justifyContent: 'center',
     alignItems: 'center',
+    elevation: 3,
   },
   buttonText: {
-    color: '#fff',  // White text inside the button
+    color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  footerText: {
+    fontSize: 14,
+    color: '#777',
+    marginTop: 16,
   },
 });

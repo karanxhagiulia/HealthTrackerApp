@@ -1,85 +1,80 @@
 import { Tabs } from 'expo-router';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: '#db190b',
-        headerStyle: {
-          backgroundColor: '#fff',
-        },
+        tabBarActiveTintColor: '#2575FC', // Active icon color: blue
+        tabBarInactiveTintColor: '#555',  // Inactive icon color: gray
+        headerStyle: { backgroundColor: '#fff' },
         headerShadowVisible: false,
         headerTintColor: '#e60000',
-        headerTitleStyle: {
-          fontWeight: 'bold',
-        },
+        headerTitleStyle: { fontWeight: 'bold' },
         tabBarStyle: {
           backgroundColor: '#fff',
+          borderTopWidth: 2, // Optional: adds a subtle border at the top
+          borderTopColor: '#2575FC', // Active tab border color (blue)
+        },
+        tabBarIndicatorStyle: {
+          backgroundColor: '#2575FC', // This will add a blue underline for the active tab
         },
       }}
     >
-      {/* Create Tab */}
       <Tabs.Screen
-        name="create"
+        name="home"
         options={{
-          title: 'Create',
+          title: 'Home',
           tabBarIcon: ({ color, focused }) => (
-            <Ionicons
-              name={focused ? 'add-circle' : 'add-circle-outline'}
-              color={color}
+            <MaterialIcons
+              name="home"
+              color={focused ? '#2575FC' : '#555'}  // Blue color when focused
               size={24}
             />
           ),
-          headerShown: false, // Hide header for Create tab
+          headerShown: false,
         }}
       />
-
-      {/* Contacts Tab */}
       <Tabs.Screen
-        name="contacts"
+        name="charts"
         options={{
-          title: 'Contacts',
+          title: 'Charts',
           tabBarIcon: ({ color, focused }) => (
-            <Ionicons
-              name={focused ? 'people' : 'people-outline'}
-              color={color}
+            <MaterialIcons
+              name={focused ? 'bar-chart' : 'insert-chart-outlined'}
+              color={focused ? '#2575FC' : '#555'}
               size={24}
             />
           ),
-          headerShown: false, // Hide header for Contacts tab
+          headerShown: false,
         }}
       />
-
-      {/* Mail Tab */}
       <Tabs.Screen
-        name="mail"
+        name="add-document"
         options={{
-          title: 'Mail',
+          title: 'Add Document',
           tabBarIcon: ({ color, focused }) => (
-            <Ionicons
-              name={focused ? 'mail' : 'mail-outline'}
-              color={color}
+            <MaterialIcons
+              name={focused ? 'note-add' : 'post-add'}
+              color={focused ? '#2575FC' : '#555'}
               size={24}
             />
           ),
-          headerShown: false, // Hide header for Mail tab
+          headerShown: false,
         }}
       />
-
-      {/* Settings Tab */}
       <Tabs.Screen
         name="settings"
         options={{
-          title: 'Settings',
+          title: 'Profile',
           tabBarIcon: ({ color, focused }) => (
-            <Ionicons
-              name={focused ? 'settings' : 'settings-outline'}
-              color={color}
+            <MaterialIcons
+              name={focused ? 'person' : 'person-outline'}
+              color={focused ? '#2575FC' : '#555'}
               size={24}
             />
           ),
-          headerShown: false, // Hide header for Settings tab
+          headerShown: false,
         }}
       />
     </Tabs>

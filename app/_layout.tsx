@@ -1,5 +1,3 @@
-// app/_layout.tsx
-
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useState } from "react";
@@ -24,33 +22,32 @@ initializeAuth(app, {
   persistence: getReactNativePersistence(ReactNativeAsyncStorage),
 });
 
-export {
-  // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
-} from "expo-router";
+// Prevent the splash screen from auto-hiding before asset loading is complete.
+SplashScreen.preventAutoHideAsync();
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: "index",
+  initialRouteName: "index", // Set onboarding as the initial route
 };
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   return (
     <Stack>
+      {/* Initial Onboarding Screen */}
       <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="(tabs)" options={{ title: 'Welcome', headerShown: false }} />
-      
-      {/* Hide header for login and signup screens */}
+
+      {/* Tab navigation layout */}
+      <Stack.Screen 
+        name="(tabs)" 
+        options={{ headerShown: false }} 
+      />
+
+      {/* Other screens */}
       <Stack.Screen name="signup" options={{ headerShown: false }} />
       <Stack.Screen name="login" options={{ headerShown: false }} />
-
-      {/* Other non-tab screens */}
       <Stack.Screen name="form" options={{ title: 'Contact Us' }} />
-      
-      {/* Not found screen */}
+
+      {/* Fallback for undefined screens */}
       <Stack.Screen name="+not-found" />
     </Stack>
   );

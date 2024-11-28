@@ -1,77 +1,90 @@
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
-import { useState } from 'react';
+import { LinearGradient } from 'expo-linear-gradient'; // For gradient button
 import { router } from 'expo-router';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // AsyncStorage for storing username
 
 export default function SignUp() {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [error, setError] = useState<string>('');
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-  const handleSignUp = () => {
-    createUserWithEmailAndPassword(getAuth(), email, password)
-      .then((userCredential) => {
-        if (userCredential.user) {
-          console.log("User signed up successfully:", userCredential.user);
-          router.replace('/(tabs)/create');
-        }
-      })
-      .catch((err) => {
-        setError(err?.message || 'An error occurred');
-      });
-  };
+  const handleSignUp = async () => {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(getAuth(), email, password);
+  
+      if (userCredential.user) {
+        // Save username in AsyncStorage
+        await AsyncStorage.setItem('username', username);
 
-  // Custom Back function to go to the index page
-  const handleBackToIndex = () => {
-    router.replace('/');  // Replace with the index page
+        // Save onboarding status in AsyncStorage
+        await AsyncStorage.setItem('hasCompletedOnboarding', 'false');
+  
+        // Navigate to onboarding screen
+        router.replace('/onboarding');
+      }
+    } catch (err) {
+      setError(err?.message || 'An error occurred');
+    }
   };
+  
 
   return (
     <View style={styles.container}>
-      {/* Custom Back Button */}
-      <TouchableOpacity style={styles.backButton} onPress={handleBackToIndex}>
-        <Ionicons name="arrow-back" size={24} color="#e60000" />
-        <Text style={styles.backText}>Back</Text>
-      </TouchableOpacity>
+      <Text style={styles.headerText}>Hey there,</Text>
+      <Text style={styles.title}>Create an Account</Text>
 
-      {/* Christmas Icon */}
-      <Ionicons name="gift" size={100} color="#e60000" style={styles.icon} />
-
-      <Text style={[styles.title, { fontFamily: 'Mountains-of-Christmas' }]}>
-        Sign Up for Christmas Fun!
-      </Text>
-
-      {/* Email input */}
+      <TextInput
+        style={styles.input}
+        placeholder="Username"
+        placeholderTextColor="#aaa"
+        onChangeText={setUsername}
+        value={username}
+      />
       <TextInput
         style={styles.input}
         placeholder="Email"
+        placeholderTextColor="#aaa"
         keyboardType="email-address"
-        onChangeText={(text) => setEmail(text)}
+        onChangeText={setEmail}
         value={email}
       />
-
-      {/* Password input */}
       <TextInput
         style={styles.input}
         placeholder="Password"
+        placeholderTextColor="#aaa"
         secureTextEntry
-        onChangeText={(text) => setPassword(text)}
+        onChangeText={setPassword}
         value={password}
       />
 
-      {/* Display error message if present */}
+      <View style={styles.checkboxContainer}>
+        <Text style={styles.termsText}>
+          By continuing you accept our{' '}
+          <Text style={styles.linkText}>Privacy Policy</Text> and{' '}
+          <Text style={styles.linkText}>Term of Use</Text>
+        </Text>
+      </View>
+
       {error && <Text style={styles.errorText}>{error}</Text>}
 
-      {/* Sign Up Button with Christmas style */}
-      <TouchableOpacity style={styles.buttonRed} onPress={handleSignUp}>
-        <Text style={styles.buttonText}>Register</Text>
+      <TouchableOpacity onPress={handleSignUp} style={styles.buttonContainer}>
+        <LinearGradient
+          colors={['#6A11CB', '#2575FC']}
+          style={styles.buttonGradient}
+        >
+          <Text style={styles.buttonText}>Register</Text>
+        </LinearGradient>
       </TouchableOpacity>
 
-      {/* Link to Log In Option */}
-      <TouchableOpacity style={styles.linkButton} onPress={() => router.push('/login')}>
-        <Text style={styles.linkText}>Already have an account? Log In</Text>
-      </TouchableOpacity>
+      <Text style={styles.footerText}>
+        Already have an account?{' '}
+        <Text style={styles.linkText} onPress={() => router.push('/login')}>
+          Login
+        </Text>
+      </Text>
     </View>
   );
 }
@@ -81,65 +94,73 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 16,
     backgroundColor: '#fff',
+    paddingHorizontal: 20,
   },
-  backButton: {
-    position: 'absolute',
-    top: 40,  // Adjust for status bar height if needed
-    left: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  backText: {
-    fontSize: 16,
-    color: '#e60000',
-    marginLeft: 8,
-  },
-  icon: {
-    marginBottom: 40,
+  headerText: {
+    fontSize: 18,
+    color: '#777',
+    marginBottom: 8,
   },
   title: {
-    fontSize: 30,
+    fontSize: 28,
     fontWeight: 'bold',
-    color: '#e60000',
-    marginBottom: 20,
-    textAlign: 'center',
+    color: '#000',
+    marginBottom: 24,
   },
   input: {
-    width: '80%',
-    padding: 12,
+    width: '100%',
+    height: 50,
+    backgroundColor: '#F7F8FA',
+    borderRadius: 10,
+    paddingHorizontal: 16,
     marginBottom: 16,
-    backgroundColor: '#f7f7f7',
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#e60000',
+    fontSize: 16,
+    color: '#333',
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  checkboxContainer: {
+    width: '100%',
+    marginBottom: 16,
+  },
+  termsText: {
+    fontSize: 12,
+    color: '#777',
+    textAlign: 'center',
+  },
+  linkText: {
+    color: '#2575FC',
+    fontWeight: 'bold',
   },
   errorText: {
-    color: 'red',
-    marginBottom: 16,
+    color: '#FF4D4D',
     fontSize: 14,
+    marginBottom: 16,
+    textAlign: 'center',
   },
-  buttonRed: {
-    backgroundColor: '#e60000',
-    paddingVertical: 12,
-    paddingHorizontal: 30,
-    borderRadius: 8,
-    marginVertical: 10,
-    width: '80%',
+  buttonContainer: {
+    width: '100%',
+    marginBottom: 16,
+  },
+  buttonGradient: {
+    width: '100%',
+    height: 50,
+    borderRadius: 25,
+    justifyContent: 'center',
     alignItems: 'center',
+    elevation: 3,
   },
   buttonText: {
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
   },
-  linkButton: {
-    marginTop: 20,
-  },
-  linkText: {
-    fontSize: 16,
-    color: '#e60000',
-    textDecorationLine: 'underline',
+  footerText: {
+    fontSize: 14,
+    color: '#777',
+    marginTop: 16,
   },
 });

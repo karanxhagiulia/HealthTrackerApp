@@ -1,93 +1,92 @@
-import { Text, View, StyleSheet, Image } from 'react-native';
-import { Link } from 'expo-router';
-import { useFonts } from 'expo-font';  // Import to load custom fonts
-//using this function to display the font I choose for Christmas 
+import { Text, View, StyleSheet } from 'react-native';
+import { Link } from 'expo-router'; // Navigation to Sign Up/Login pages
+import Ionicons from 'react-native-vector-icons/Ionicons'; // Importing Ionicons for the health-related icon
+import { LinearGradient } from 'expo-linear-gradient'; // For gradient button styling
+
 export default function Index() {
-  const [fontsLoaded] = useFonts({
-    'Mountains-of-Christmas': require('../assets/fonts/MountainsofChristmas-Regular.ttf'),  
-  });
-
-  if (!fontsLoaded) {
-    return <Text>Loading...</Text>;  // Show a loading message while the font is loading
-  }
-
   return (
     <View style={styles.container}>
-      <Image
-        source={require('../assets/icons/imagewelcome.png')}
-        style={styles.icon}
-      />
+      <Ionicons name="heart-circle" size={200} color="#007bff" style={styles.icon} />
 
-      <Text style={[styles.header, { fontFamily: 'Mountains-of-Christmas' }]}>
-        Santa is coming to town!
+      <Text style={styles.header}>
+        Welcome to Health Tracker
       </Text>
 
       <Text style={styles.subtitle}>
-        Create Christmas Cards and send them to your loved ones!
+        Track your health, monitor your progress, and visualize your data to uncover trends!
       </Text>
 
-      <Link href="/signup" style={styles.buttonRed}>
-        <Text style={styles.buttonText}>Sign Up</Text>
+      {/* Sign Up Button */}
+      <Link href="/signup" style={styles.buttonContainer}>
+        <LinearGradient colors={['#6A11CB', '#2575FC']} style={styles.buttonGradient}>
+          <Text style={styles.buttonText}>Sign Up</Text>
+        </LinearGradient>
       </Link>
 
-      <Link href="/login" style={styles.buttonRed}>
-        <Text style={styles.buttonText}>Log In</Text>
+      {/* Log In Button */}
+      <Link href="/login" style={styles.buttonContainer}>
+        <LinearGradient colors={['#6A11CB', '#2575FC']} style={styles.buttonGradient}>
+          <Text style={styles.buttonText}>Log In</Text>
+        </LinearGradient>
       </Link>
 
-      <Link href="/create" style={styles.skipText}>
+      {/* Skip Link */}
+      <Link href="/home" style={styles.skipText}>
         Skip and Continue
       </Link>
     </View>
   );
 }
-//styling of the page
+
+// Updated styling with system fonts and consistent look as in SignUp
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',  // White background for a clean, light feel
+    backgroundColor: '#fff', // White background for a clean look
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
   },
   icon: {
-    width: 220,        
-    height: 220,        
-    marginBottom: 40,   
-    resizeMode: 'contain',
+    marginBottom: 40, // Space between icon and header
   },
   header: {
-    fontSize: 50,
+    fontSize: 28,
     fontWeight: 'bold',
-    color: '#e60000',  // Christmas red color for the title
+    color: '#333', // Dark gray header text
     textAlign: 'center',
-    marginBottom: 40,
+    marginBottom: 20,
+    fontFamily: 'sans-serif', // Default system font (Android) or 'Helvetica' for iOS
   },
   subtitle: {
-    fontSize: 18,
-    color: '#333',  // Dark grey for secondary text
+    fontSize: 16,
+    color: '#555', // Slightly lighter gray for subtitle
     marginBottom: 40,
-    textAlign: 'center',  // Center the subtitle text
+    textAlign: 'center',
+    fontFamily: 'sans-serif', // Default system font (Android) or 'Helvetica' for iOS
   },
-  buttonRed: {
-    backgroundColor: '#e60000',  // Red background
-    paddingVertical: 12,
-    paddingHorizontal: 30,
-    borderRadius: 8,
+  buttonContainer: {
+    width: '80%',
     marginVertical: 10,
-    width: '80%',  // Make the button wide
+  },
+  buttonGradient: {
+    width: '100%',
+    height: 50,
+    borderRadius: 25,
+    justifyContent: 'center',
     alignItems: 'center',
+    elevation: 3, // Slight shadow effect
   },
   buttonText: {
-    color: '#fff',  // White text inside the button
+    color: '#fff', // White text for contrast
     fontSize: 18,
     fontWeight: 'bold',
   },
   skipText: {
     fontSize: 16,
-    color: '#e60000',  
+    color: '#2575FC', // Blue text for the skip link
     marginTop: 20,
     textDecorationLine: 'underline',
-    textAlign: 'center',  
+    textAlign: 'center',
   },
 });
-// © 2024 Karanxha Giulia. All rights reserved.

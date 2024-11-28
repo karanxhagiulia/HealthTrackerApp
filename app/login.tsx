@@ -1,84 +1,69 @@
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';  // Import Firebase authentication
-import { useState } from 'react';
-import { router } from 'expo-router';  // For navigation
-import Ionicons from 'react-native-vector-icons/Ionicons';  // Christmas icon
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { LinearGradient } from 'expo-linear-gradient';
+import { router } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
 
 export default function LogIn() {
-  const [email, setEmail] = useState<string>(''); // Email state
-  const [password, setPassword] = useState<string>(''); // Password state
-  const [error, setError] = useState<string>(''); // Error message state
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-  const handleLogin = () => {
-    const auth = getAuth();
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        if (userCredential.user) {
-          console.log("User logged in successfully:", userCredential.user);
-          router.replace('/(tabs)/create');
-        }
-      })
-      .catch((err) => {
-        setError(err.message || 'An error occurred');  // Handle login errors
-      });
-  };
+  const handleLogin = async () => {
+    try {
+      const userCredential = await signInWithEmailAndPassword(getAuth(), email, password);
+      if (userCredential.user) {
+        // Get username from the user object (if available)
+        const username = userCredential.user.displayName || 'Default User'; // If there's no displayName, fallback to a default value
+        
+        // Store the username in AsyncStorage
+        await AsyncStorage.setItem('username', username);
 
-  // Custom Back function to go to the index page
-  const handleBackToIndex = () => {
-    router.replace('/');  // Replace with the index page
+        // Navigate to the home screen
+        router.replace('/(tabs)/home');
+      }
+    } catch (err) {
+      setError(err?.message || 'An error occurred');
+    }
   };
 
   return (
     <View style={styles.container}>
-      {/* Custom Back Button */}
-      <TouchableOpacity style={styles.backButton} onPress={handleBackToIndex}>
-        <Ionicons name="arrow-back" size={24} color="#e60000" />
-        <Text style={styles.backText}>Back</Text>
-      </TouchableOpacity>
+      <Text style={styles.headerText}>Welcome Back,</Text>
+      <Text style={styles.title}>Log in to your Account</Text>
 
-      {/* Christmas Icon */}
-      <Ionicons name="gift" size={100} color="#e60000" style={styles.icon} />
-
-      {/* Title with Christmas font */}
-      <Text style={[styles.title, { fontFamily: 'Mountains-of-Christmas' }]}>
-        Welcome Back! 🎅
-      </Text>
-
-      {/* Subtitle */}
-      <Text style={styles.subtitle}>
-        Log in to create your Christmas cards!
-      </Text>
-
-      {/* Email Input */}
       <TextInput
         style={styles.input}
         placeholder="Email"
+        placeholderTextColor="#aaa"
         keyboardType="email-address"
-        onChangeText={(text) => setEmail(text)}
+        onChangeText={setEmail}
         value={email}
       />
-
-      {/* Password Input */}
       <TextInput
         style={styles.input}
         placeholder="Password"
+        placeholderTextColor="#aaa"
         secureTextEntry
-        onChangeText={(text) => setPassword(text)}
+        onChangeText={setPassword}
         value={password}
       />
 
-      {/* Display error message if any */}
       {error && <Text style={styles.errorText}>{error}</Text>}
 
-      {/* Log In Button with Christmas style */}
-      <TouchableOpacity style={styles.buttonRed} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Log In</Text>
+      <TouchableOpacity onPress={handleLogin} style={styles.buttonContainer}>
+        <LinearGradient colors={['#6A11CB', '#2575FC']} style={styles.buttonGradient}>
+          <Text style={styles.buttonText}>Log In</Text>
+        </LinearGradient>
       </TouchableOpacity>
 
-      {/* Link to Sign Up Option */}
-      <TouchableOpacity style={styles.linkButton} onPress={() => router.push('/signup')}>
-        <Text style={styles.linkText}>Don't have an account? Sign Up</Text>
-      </TouchableOpacity>
+      <Text style={styles.footerText}>
+        Don't have an account?{' '}
+        <Text style={styles.linkText} onPress={() => router.push('/signup')}>
+          Sign Up
+        </Text>
+      </Text>
     </View>
   );
 }
@@ -88,71 +73,64 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 16,
-    backgroundColor: '#fff',  // White background for a clean, light feel
+    backgroundColor: '#fff',
+    paddingHorizontal: 20,
   },
-  backButton: {
-    position: 'absolute',
-    top: 40,  // Adjust for status bar height if needed
-    left: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  backText: {
-    fontSize: 16,
-    color: '#e60000',
-    marginLeft: 8,
-  },
-  icon: {
-    marginBottom: 40,  // Add spacing below the icon
+  headerText: {
+    fontSize: 18,
+    color: '#777',
+    marginBottom: 8,
   },
   title: {
-    fontSize: 30,
+    fontSize: 28,
     fontWeight: 'bold',
-    color: '#e60000',  // Christmas red for the title
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  subtitle: {
-    fontSize: 18,
-    color: '#333',  // Dark grey for the subtitle
-    marginBottom: 40,
-    textAlign: 'center',
+    color: '#000',
+    marginBottom: 24,
   },
   input: {
-    width: '80%',
-    padding: 12,
+    width: '100%',
+    height: 50,
+    backgroundColor: '#F7F8FA',
+    borderRadius: 10,
+    paddingHorizontal: 16,
     marginBottom: 16,
-    backgroundColor: 'white',
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#ccc',
+    fontSize: 16,
+    color: '#333',
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
-  buttonRed: {
-    backgroundColor: '#e60000',  // Red background for the button
-    paddingVertical: 12,
-    paddingHorizontal: 30,
-    borderRadius: 8,
-    marginVertical: 10,
-    width: '80%',  // Make the button wide
+  errorText: {
+    color: '#FF4D4D',
+    fontSize: 14,
+    marginBottom: 16,
+    textAlign: 'center',
+  },
+  buttonContainer: {
+    width: '100%',
+    marginBottom: 16,
+  },
+  buttonGradient: {
+    width: '100%',
+    height: 50,
+    borderRadius: 25,
+    justifyContent: 'center',
     alignItems: 'center',
+    elevation: 3,
   },
   buttonText: {
-    color: '#fff',  // White text inside the button
+    color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
   },
-  linkButton: {
-    marginTop: 20,
+  footerText: {
+    fontSize: 14,
+    color: '#777',
+    marginTop: 16,
   },
   linkText: {
-    fontSize: 16,
-    color: '#e60000',  // Red text for the link
-    textDecorationLine: 'underline',
-  },
-  errorText: {
-    color: 'red',
-    marginBottom: 16,
-    fontSize: 14,
+    color: '#2575FC',
+    fontWeight: 'bold',
   },
 });
