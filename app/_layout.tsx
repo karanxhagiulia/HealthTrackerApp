@@ -23,7 +23,7 @@ initializeAuth(app, {
 });
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
+//SplashScreen.preventAutoHideAsync();
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
@@ -33,7 +33,7 @@ export const unstable_settings = {
 export default function RootLayout() {
   return (
     <Stack>
-      {/* Initial Onboarding Screen */}
+      {/* Initial Index Screen */}
       <Stack.Screen name="index" options={{ headerShown: false }} />
 
       {/* Tab navigation layout */}
@@ -46,7 +46,13 @@ export default function RootLayout() {
       <Stack.Screen name="signup" options={{ headerShown: false }} />
       <Stack.Screen name="login" options={{ headerShown: false }} />
       <Stack.Screen name="form" options={{ title: 'Contact Us' }} />
-
+      <Stack.Screen name="onboarding" options={{ headerShown: false }} />
+      <Stack.Screen name="update/cholesterol" options={{ title: 'Your Cholesterol Data' }} />
+      <Stack.Screen name="add-cholesterol-data" options={{ title: 'Add Data' }} />
+      <Stack.Screen name="CholesterolChart"options={{ headerShown: false }} />
+ 
+ 
+ 
       {/* Fallback for undefined screens */}
       <Stack.Screen name="+not-found" />
     </Stack>

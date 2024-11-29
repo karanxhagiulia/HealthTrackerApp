@@ -70,10 +70,7 @@ export default function ContactUsForm() {
         </LinearGradient>
       </TouchableOpacity>
 
-      {/* Footer text */}
-      <Text style={styles.footerText}>
-        Need help? <Text style={styles.linkText}>Contact Support</Text>
-      </Text>
+
     </View>
   );
 }

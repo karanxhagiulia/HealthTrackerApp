@@ -46,8 +46,8 @@ export default function SettingsScreen() {
 
       <View style={styles.accountContainer}>
         <Image 
-          source={require('../../assets/images/user.png')} // Add the image from assets
-          style={styles.profileImage} // Apply styles to the image
+          source={require('../../assets/images/user.png')} 
+          style={styles.profileImage}
         />
         <Text style={styles.accountName}>{username || "No username set"}</Text>
       </View>
@@ -126,10 +126,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     fontFamily: 'sans-serif', // Use the default system font (Android) or 'Helvetica' for iOS, like in SignUp page
   },
-  santaEmoji: {
-    fontSize: 40,
-    marginRight: 10,
-  },
+
   accountContainer: {
     alignItems: 'center',
     marginBottom: 30,

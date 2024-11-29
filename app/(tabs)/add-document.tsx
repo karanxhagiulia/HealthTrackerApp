@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -47,15 +47,15 @@ export default function AddDocumentScreen() {
       {/* Header Section */}
       <View style={styles.header}>
         <View style={styles.dataBox}>
-          <Text style={styles.dataValue}>{healthMetrics.height || 'N/A'}cm</Text>
+          <Text style={[styles.dataValue, styles.blueText]}>{healthMetrics.height || 'N/A'}cm</Text>
           <Text style={styles.dataLabel}>Height</Text>
         </View>
         <View style={styles.dataBox}>
-          <Text style={styles.dataValue}>{healthMetrics.weight || 'N/A'}kg</Text>
+          <Text style={[styles.dataValue, styles.blueText]}>{healthMetrics.weight || 'N/A'}kg</Text>
           <Text style={styles.dataLabel}>Weight</Text>
         </View>
         <View style={styles.dataBox}>
-          <Text style={styles.dataValue}>{userProfile.age || 'N/A'}yo</Text> {/* Display age */}
+          <Text style={[styles.dataValue, styles.blueText]}>{userProfile.age || 'N/A'}yo</Text> {/* Display age */}
           <Text style={styles.dataLabel}>Age</Text>
         </View>
       </View>
@@ -72,7 +72,10 @@ export default function AddDocumentScreen() {
             {latestCholesterol !== null ? `${latestCholesterol} mg/dL` : 'N/A'}
           </Text>
         </View>
-        <Text style={styles.arrow}>→</Text>
+        <Image
+          source={require('../../assets/icons/Arrow.png')} // Path to your custom image
+          style={styles.arrow}
+        />
       </TouchableOpacity>
 
       {[ 
@@ -89,13 +92,16 @@ export default function AddDocumentScreen() {
             <Text style={styles.cardTitle}>{item.label}</Text>
             <Text style={styles.cardValue}>{item.value}</Text>
           </View>
-          <Text style={styles.arrow}>→</Text>
+          <Image
+            source={require('../../assets/icons/Arrow.png')} // Path to your custom image
+            style={styles.arrow}
+          />
         </TouchableOpacity>
       ))}
 
       {/* Health Metrics Section */}
       <Text style={styles.sectionTitle}>Health Metrics</Text>
-      {[
+      {[ 
         { label: 'Height', value: `${healthMetrics.height || 'N/A'} cm`, field: 'height' },
         { label: 'Weight', value: `${healthMetrics.weight || 'N/A'} kg`, field: 'weight' },
         { label: 'Age', value: `${userProfile.age || 'N/A'} yo`, field: 'age' },
@@ -110,7 +116,10 @@ export default function AddDocumentScreen() {
             <Text style={styles.cardTitle}>{item.label}</Text>
             <Text style={styles.cardValue}>{item.value}</Text>
           </View>
-          <Text style={styles.arrow}>→</Text>
+          <Image
+            source={require('../../assets/icons/Arrow.png')} // Path to your custom image
+            style={styles.arrow}
+          />
         </TouchableOpacity>
       ))}
     </ScrollView>
@@ -133,8 +142,12 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: '#fff',
     borderRadius: 8,
-    elevation: 1,
+    elevation: 5,  // Added shadow
     minWidth: 100,
+    margin: 5,  // Added margin for spacing
+  },
+  blueText: {
+    color: '#92A3FD',  // Light blue text color
   },
   dataValue: {
     fontSize: 20,
@@ -160,7 +173,7 @@ const styles = StyleSheet.create({
     padding: 15,
     marginVertical: 5,
     borderRadius: 8,
-    elevation: 1,
+    elevation: 5,  // Added shadow
   },
   cardTitle: {
     fontSize: 16,
@@ -172,7 +185,8 @@ const styles = StyleSheet.create({
     color: '#777',
   },
   arrow: {
-    fontSize: 20,
-    color: '#ccc',
+    width: 20,
+    height: 20,
+   //tintColor: '#aee2ff', // Make the arrow blue (adjust the tint color)
   },
 });

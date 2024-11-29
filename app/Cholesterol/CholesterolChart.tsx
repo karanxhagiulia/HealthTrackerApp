@@ -103,3 +103,5 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
 });
+// Inside CholesterolChart.js or CholesterolChart.tsx
+export default CholesterolChart;

@@ -29,16 +29,16 @@ const OnboardingScreen = () => {
       title: 'Let’s complete your profile',
       text: 'It will help us to know more about you!',
       backgroundColor: '#F9FAFB',
-      image: require('../assets/images/report.png'), // Updated image
+      image: require('../assets/images/onboarding.png'), // Updated image
       buttonText: 'Confirm',
     },
     {
       key: '3',
+      image: require('../assets/images/report.png'), // Updated image in the top part
       title: 'Almost Done!',
       text: 'Provide your birth date, weight, and height to complete the setup.',
       backgroundColor: '#F9FAFB',
       buttonText: 'Submit',
-      image: null,
     },
   ];
 
@@ -75,19 +75,26 @@ const OnboardingScreen = () => {
           setError('Please fill in all the fields.');
           return;
         }
-  
+
         const birthYear = new Date(birthDate).getFullYear();
         const currentYear = new Date().getFullYear();
         const age = currentYear - birthYear; // Calculate the age
-  
-        const userProfile = {
-          birthDate: birthDate.toISOString(),
+
+        // Save data directly in healthMetrics
+        const healthMetrics = [{
           weight,
           height,
+          heartRate: null, // Default value for heartRate, can be updated later
+        }];
+
+        // Save the health metrics and user info
+        const userProfile = {
+          birthDate: birthDate.toISOString(),
           age, // Save calculated age
         };
-  
-        await AsyncStorage.setItem('userData', JSON.stringify(userProfile));
+
+        await AsyncStorage.setItem('userData', JSON.stringify(userProfile)); // Save user data
+        await AsyncStorage.setItem('healthMetrics', JSON.stringify(healthMetrics)); // Save health metrics
         await AsyncStorage.setItem('hasCompletedOnboarding', 'true');
         router.replace('/(tabs)/home');
       } catch (error) {
@@ -96,7 +103,6 @@ const OnboardingScreen = () => {
       }
     }
   };
-  
 
   if (isLoading) {
     return (
@@ -108,8 +114,11 @@ const OnboardingScreen = () => {
 
   return (
     <View style={[styles.slide, { backgroundColor: slides[currentSlide].backgroundColor }]}>
+      {/* Display image only in slide 2 and 3 */}
       {slides[currentSlide].image && (
-        <Image source={slides[currentSlide].image} style={styles.image} />
+        <View style={styles.imageContainer}>
+          <Image source={slides[currentSlide].image} style={styles.image} />
+        </View>
       )}
       <Text style={styles.title}>{slides[currentSlide].title}</Text>
       <Text style={styles.text}>{slides[currentSlide].text}</Text>
@@ -172,10 +181,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
   },
+  imageContainer: {
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: 20, // Adjust margin for spacing
+    marginTop: 40, // Top space for the image
+  },
   image: {
-    width: 150,
-    height: 150,
-    marginBottom: 20,
+    width: 200, // Adjust size of the image
+    height: 200,
+    resizeMode: 'contain',
   },
   title: {
     fontSize: 26,
