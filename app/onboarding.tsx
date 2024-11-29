@@ -26,11 +26,11 @@ const OnboardingScreen = () => {
     },
     {
       key: '2',
-      title: 'Your health data in one place',
-      text: 'Register, upload your data and visualize it!',
+      title: 'Let’s complete your profile',
+      text: 'It will help us to know more about you!',
       backgroundColor: '#F9FAFB',
-      image: require('../assets/images/onboarding.png'),
-      buttonText: 'Get Started',
+      image: require('../assets/images/report.png'), // Updated image
+      buttonText: 'Confirm',
     },
     {
       key: '3',
@@ -75,9 +75,19 @@ const OnboardingScreen = () => {
           setError('Please fill in all the fields.');
           return;
         }
-        await AsyncStorage.setItem('userBirthDate', birthDate.toISOString());
-        await AsyncStorage.setItem('userWeight', weight);
-        await AsyncStorage.setItem('userHeight', height);
+  
+        const birthYear = new Date(birthDate).getFullYear();
+        const currentYear = new Date().getFullYear();
+        const age = currentYear - birthYear; // Calculate the age
+  
+        const userProfile = {
+          birthDate: birthDate.toISOString(),
+          weight,
+          height,
+          age, // Save calculated age
+        };
+  
+        await AsyncStorage.setItem('userData', JSON.stringify(userProfile));
         await AsyncStorage.setItem('hasCompletedOnboarding', 'true');
         router.replace('/(tabs)/home');
       } catch (error) {
@@ -86,6 +96,7 @@ const OnboardingScreen = () => {
       }
     }
   };
+  
 
   if (isLoading) {
     return (
@@ -162,8 +173,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   image: {
-    width: 250,
-    height: 250,
+    width: 150,
+    height: 150,
     marginBottom: 20,
   },
   title: {

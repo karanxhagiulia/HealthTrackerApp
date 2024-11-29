@@ -9,7 +9,6 @@ export default function AddDocumentScreen() {
   const [latestCholesterol, setLatestCholesterol] = useState<number | null>(null); // State for latest cholesterol
   const router = useRouter();
 
-  // Fetch user data, health metrics, and cholesterol data
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -17,7 +16,7 @@ export default function AddDocumentScreen() {
         const healthData = await AsyncStorage.getItem('healthMetrics');
         const cholesterolData = await AsyncStorage.getItem('cholesterolData');
 
-        if (userData) setUserProfile(JSON.parse(userData));
+        if (userData) setUserProfile(JSON.parse(userData)); // Load user profile
         if (healthData) {
           const parsedMetrics = JSON.parse(healthData);
           setHealthMetrics(parsedMetrics[parsedMetrics.length - 1] || {});
@@ -27,7 +26,7 @@ export default function AddDocumentScreen() {
           const parsedCholesterol = JSON.parse(cholesterolData);
           if (parsedCholesterol.length > 0) {
             const latest = parsedCholesterol[parsedCholesterol.length - 1];
-            setLatestCholesterol(latest.total); // Extract the latest cholesterol total
+            setLatestCholesterol(latest.total); // Extract latest cholesterol
           }
         }
       } catch (error) {
@@ -56,7 +55,7 @@ export default function AddDocumentScreen() {
           <Text style={styles.dataLabel}>Weight</Text>
         </View>
         <View style={styles.dataBox}>
-          <Text style={styles.dataValue}>{userProfile.age || 'N/A'}yo</Text>
+          <Text style={styles.dataValue}>{userProfile.age || 'N/A'}yo</Text> {/* Display age */}
           <Text style={styles.dataLabel}>Age</Text>
         </View>
       </View>
