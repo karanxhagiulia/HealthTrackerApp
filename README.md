@@ -1,20 +1,6 @@
 #   Health Tracker App 
 ####  University Project.
 
-## App Overview
-
-The **Christmas Card App** allows users to:
-
-
-## Features
-
-
-   
-## Screens and Routing
-The app uses a nested layout structure with expo-router for clean navigation:
-
-* Root Layout (app/_layout.tsx): Handles the main stack navigation and initial route setup.
-* Tab Layout (app/(tabs)/_layout.tsx): Contains the tab navigation screens, including "Create", "Contacts", "Your Mail", and "Settings".
 
 ## Learn more
 
